@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>App Signup Step 1</title>
+</head>
+<body>
+
+	<h1>Отладчик событий GA</h1>
+
+	<form name="ga_events">
+		
+		<button id="newClient"> Очистить всё и создать нового клиента </button>
+		<br><br>
+		<button id="sendEvent"><b> Отправить событие в GA! 🚀 </b></button>
+
+		<h2>Параметры</h2>
+
+		<label>v (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#v">doc</a>)</label><br><input type="text" name="v" id="v" value="1" disabled> 
+		<br><br>
+		<label>tid (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#tid">doc</a>)</label><br><input type="text" name="tid" id="tid" value="UA-138370238-1" disabled> 
+		<br><br>
+		<label>cid (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#cid">doc</a>)</label><br><input type="text" name="cid" id="cid" disabled> 
+		<br><br>
+		<label>uid (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#uid">doc</a>)</label><br><input type="text" name="uid" id="uid" disabled> 
+		<br><br>
+		<label>gclid (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#gclid">doc</a>)</label><br><input type="text" name="gclid" id="gclid" disabled> 
+		<br><br>
+		<label>t (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#t">doc</a>)</label><br><input type="text" name="t" id="t" value="" disabled> 
+		<br><br>
+		<label>dl (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#dl">doc</a>)</label><br><input type="text" name="dl" id="dl" value="" disabled> 
+		<br><br>
+		<label>ec (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#ec">doc</a>)</label><br><input type="text" name="ec" id="ec" value="" disabled> 
+		<br><br>
+		<label>ea (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#ea">doc</a>)</label><br><input type="text" name="ea" id="ea" value="" disabled> 
+		<br><br>
+		<label>el (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#el">doc</a>)</label><br><input type="text" name="el" id="el" value="" disabled> 
+
+		<br><br><br>
+		<button id="visitSite"> Вошёл на сайт </button>
+		<br>
+		<button id="startSignup"> Перешёл к регистрации </button>
+		<br>
+		<button id="finishSignup"> Зарегистрировался </button>
+		<br>
+		<button id="installCode"> Поставил код </button>
+		<br>
+		<button id="payment"> Заплатил </button>
+
+		<br><br><br>
+
+		<textarea rows="20" style="width:100%" id="log" readonly></textarea>
+		
+	</form>
+
+	<script type="text/javascript">
+		var cidField = document.getElementById('cid');
+		var uidField = document.getElementById('uid');
+		var tField = document.getElementById('t');
+		var dlField = document.getElementById('dl');
+		var ecField = document.getElementById('ec');
+		var eaField = document.getElementById('ea');
+		var elField = document.getElementById('el');
+
+		var logField = document.getElementById('log');
+
+		var sendEventButton = document.getElementById('sendEvent');
+		sendEventButton.addEventListener('click', function(e){e.preventDefault(); sendEvent();});
+
+		var newClientButton = document.getElementById('newClient');
+		newClientButton.addEventListener('click', function(e){e.preventDefault(); fillForm('clear');});
+
+		var visitSiteButton = document.getElementById('visitSite');
+		visitSiteButton.addEventListener('click', function(e){e.preventDefault(); fillForm('visitSite');});
+
+		var startSignupButton = document.getElementById('startSignup');
+		startSignupButton.addEventListener('click', function(e){e.preventDefault(); fillForm('startSignup');});
+
+		var finishSignupButton = document.getElementById('finishSignup');
+		finishSignupButton.addEventListener('click', function(e){e.preventDefault(); fillForm('finishSignup');});
+
+		var startSignupButton = document.getElementById('startSignup');
+		startSignupButton.addEventListener('click', function(e){e.preventDefault(); fillForm('startSignup');});
+
+		var installCodeButton = document.getElementById('installCode');
+		installCodeButton.addEventListener('click', function(e){e.preventDefault(); fillForm('installCode');});
+
+		var paymentButton = document.getElementById('payment');
+		paymentButton.addEventListener('click', function(e){e.preventDefault(); alert('Sorry :(');});
+
+
+		var eventParameters = {};
+		eventParameters.clear = {
+			cid: false,
+			uid: false,
+			gclid: false,
+			t: false,
+			dl: false,
+			ec: false,
+			ea: false,
+			el: false
+		};
+		eventParameters.new = {
+			cid: true,
+			uid: true,
+			gclid: false,
+			t: false,
+			dl: false,
+			ec: false,
+			ea: false,
+			el: false
+		};
+		eventParameters.visitSite = {
+			cid: true,
+			uid: false,
+			gclid: false,
+			t: 'pageview',
+			dl: 'https://www.jivosite.ru/',
+			ec: false,
+			ea: false,
+			el: false
+		};
+		eventParameters.startSignup = {
+			cid: true,
+			uid: false,
+			gclid: false,
+			t: 'event',
+			dl: false,
+			ec: 'Registration',
+			ea: 'Goto step #1',
+			el: 'Account information'
+		};
+		eventParameters.finishSignup = {
+			cid: true,
+			uid: true,
+			gclid: false,
+			t: 'event',
+			dl: false,
+			ec: 'Registration',
+			ea: 'Goto step #6',
+			el: 'Open App'
+		};
+		eventParameters.installCode = {
+			cid: true,
+			uid: true,
+			gclid: false,
+			t: 'event',
+			dl: false,
+			ec: 'Registration',
+			ea: 'Installation',
+			el: 'Code Is Installed'
+		}
+
+
+		function fillForm(what) {
+			if(what == 'clear') {
+				cidField.value = '';
+				uidField.value = '';
+				tField.value = '';
+				dlField.value = '';
+				ecField.value = '';
+				eaField.value = '';
+				elField.value = '';
+
+				localStorage.clear();
+				return;
+			}
+
+			var fields = eventParameters[what];
+
+			if(fields.cid == true) {
+				if(localStorage.getItem('gacid') == null) {
+					localStorage.setItem('gacid', guid());
+				}
+				cidField.value = localStorage.getItem('gacid');
+			}
+
+			if(fields.uid == true) {
+				if(localStorage.getItem('gauid') == null) {
+					localStorage.setItem('gauid', Math.round(Math.random()*100000));
+				}
+				uidField.value = localStorage.getItem('gauid');
+			}
+
+			if(fields.t) {tField.value = fields.t} else {tField.value = ''};
+			if(fields.dl) {dlField.value = fields.dl} else {dlField.value = ''};
+			if(fields.ec) {ecField.value = fields.ec} else {ecField.value = ''};
+			if(fields.ea) {eaField.value = fields.ea} else {eaField.value = ''};
+			if(fields.el) {elField.value = fields.el} else {elField.value = ''};
+
+
+		}
+
+		fillForm('new');
+
+		function guid() {
+			function s4() {
+				return Math.floor((1 + Math.random()) * 0x10000)
+				.toString(16)
+				.substring(1);
+			}
+			return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+			s4() + '-' + s4() + s4() + s4();
+		}
+
+
+	function sendEvent() {
+		/*собираем строку из полей и пишем в консоль*/
+		var parameters = [];
+		var fieldsList = document.getElementsByTagName('input');
+		for(var i = 0; i < fieldsList.length; i++) {
+			if(fieldsList[i].value != '') {
+				parameters.push(fieldsList[i].id + '=' + encodeURIComponent(fieldsList[i].value));
+			}
+		}
+		var parametersStr = parameters.join('&');
+		log.value += parametersStr + '\n\n'
+		console.log(parametersStr);
+
+		/*отправляем реальный POST запрос*/
+		
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", 'https://www.google-analytics.com/collect', true);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.send(parametersStr);
+
+	}
+
+
+	</script>
+
+
+
+
+</body>
+</html>
