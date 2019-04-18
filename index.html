@@ -34,7 +34,11 @@
 		<br><br>
 		<label>ea (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#ea">doc</a>)</label><br><input type="text" name="ea" id="ea" value=""> 
 		<br><br>
-		<label>el (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#el">doc</a>)</label><br><input type="text" name="el" id="el" value=""> 
+		<label>el (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#el">doc</a>)</label><br><input type="text" name="el" id="el" value="">
+		<br><br>
+		<label>ti (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#ti">doc</a>)</label><br><input type="text" name="ti" id="ti" value="">
+		<br><br>
+		<label>tr (<a target="_blank" href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#tr">doc</a>)</label><br><input type="text" name="tr" id="tr" value=""> 
 
 
 		
@@ -66,6 +70,8 @@
 		var ecField = document.getElementById('ec');
 		var eaField = document.getElementById('ea');
 		var elField = document.getElementById('el');
+		var tiField = document.getElementById('ti');
+		var trField = document.getElementById('tr');
 
 		var fieldsList = document.getElementsByTagName('input');
 
@@ -93,13 +99,15 @@
 		installCodeButton.addEventListener('click', function(e){e.preventDefault(); fillForm('installCode');});
 
 		var paymentButton = document.getElementById('payment');
-		paymentButton.addEventListener('click', function(e){e.preventDefault(); alert('Sorry :(');});
+		paymentButton.addEventListener('click', function(e){e.preventDefault(); fillForm('payment');});
 
-		tField.addEventListener('change', function(){fieldChanged(this);})
-		dlField.addEventListener('change', function(){fieldChanged(this);})
-		ecField.addEventListener('change', function(){fieldChanged(this);})
-		eaField.addEventListener('change', function(){fieldChanged(this);})
-		elField.addEventListener('change', function(){fieldChanged(this);})
+		tField.addEventListener('change', function(){fieldChanged(this);});
+		dlField.addEventListener('change', function(){fieldChanged(this);});
+		ecField.addEventListener('change', function(){fieldChanged(this);});
+		eaField.addEventListener('change', function(){fieldChanged(this);});
+		elField.addEventListener('change', function(){fieldChanged(this);});
+		tiField.addEventListener('change', function(){fieldChanged(this);});
+		trField.addEventListener('change', function(){fieldChanged(this);});
 
 		var eventParameters = {};
 		eventParameters.clear = {
@@ -110,7 +118,9 @@
 			dl: false,
 			ec: false,
 			ea: false,
-			el: false
+			el: false,
+			ti: false,
+			tr: false
 		};
 		eventParameters.new = {
 			cid: true,
@@ -120,7 +130,9 @@
 			dl: false,
 			ec: false,
 			ea: false,
-			el: false
+			el: false,
+			ti: false,
+			tr: false
 		};
 		eventParameters.visitSite = {
 			cid: true,
@@ -130,7 +142,9 @@
 			dl: 'https://www.jivosite.ru/',
 			ec: false,
 			ea: false,
-			el: false
+			el: false,
+			ti: false,
+			tr: false
 		};
 		eventParameters.startSignup = {
 			cid: true,
@@ -140,7 +154,9 @@
 			dl: false,
 			ec: 'Registration',
 			ea: 'Goto step #1',
-			el: 'Account information'
+			el: 'Account information',
+			ti: false,
+			tr: false
 		};
 		eventParameters.finishSignup = {
 			cid: true,
@@ -150,7 +166,9 @@
 			dl: false,
 			ec: 'Registration',
 			ea: 'Goto step #6',
-			el: 'Open App'
+			el: 'Open App',
+			ti: false,
+			tr: false
 		};
 		eventParameters.installCode = {
 			cid: true,
@@ -160,7 +178,22 @@
 			dl: false,
 			ec: 'Registration',
 			ea: 'Installation',
-			el: 'Code Is Installed'
+			el: 'Code Is Installed',
+			ti: false,
+			tr: false
+		}
+		eventParameters.payment = {
+			cid: true,
+			uid: true,
+			gclid: false,
+			t: 'transaction',
+			dl: false,
+			ec: false,
+			ea: false,
+			el: false,
+			ti: true,
+			tr: true
+
 		}
 
 		function fieldChanged(e) {
@@ -200,6 +233,8 @@
 			if(fields.ec) {ecField.value = fields.ec} else {ecField.value = ''};
 			if(fields.ea) {eaField.value = fields.ea} else {eaField.value = ''};
 			if(fields.el) {elField.value = fields.el} else {elField.value = ''};
+			if(fields.ti) {tiField.value = Math.round(Math.random()*100000)} else {tiField.value = ''};
+			if(fields.tr) {trField.value = Math.round(Math.random()*100)} else {trField.value = ''};
 
 
 		}
